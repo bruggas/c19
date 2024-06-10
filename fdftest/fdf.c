@@ -6,7 +6,7 @@
 /*   By: felix <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:50:30 by felix             #+#    #+#             */
-/*   Updated: 2024/05/23 17:25:49 by felix            ###   ########.fr       */
+/*   Updated: 2024/05/27 14:42:15 by felix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
@@ -185,6 +185,10 @@ int	key_hook(int keycode, t_terrain *terrain)
     }else if (keycode == 65364) {
 	terrain->rotation.x -= 5;
 	redraw = 1;
+    }else if (keycode == 65307) {
+	end_window(terrain);
+	mlx_destroy_window(terrain->mlx, terrain->mlx_win);
+	return 0;
     }
 
     if (redraw) {
@@ -192,7 +196,7 @@ int	key_hook(int keycode, t_terrain *terrain)
 	render_terrain(terrain);
 	mlx_put_image_to_window(terrain->mlx, terrain->mlx_win, terrain->img, 0, 0);
     }
-	return (0);
+    return (1);
 }
 
 int	main(void)
@@ -205,8 +209,6 @@ int	main(void)
 	rotation.x = 30;
 	rotation.y = 30;
 	rotation.z = 0;
-	terrain.origin_x = 0;
-	terrain.origin_y = 0;
 	terrain.low_point = 0;
 	terrain.high_point = 0;
 	terrain.rotation = rotation;
@@ -216,10 +218,13 @@ int	main(void)
 	terrain.addr = mlx_get_data_addr(terrain.img, &terrain.bits_per_pixel, &terrain.line_length, &terrain.endian);
 	if (read_terrain_map(&terrain, map) != 0)
 		return (0);
+	terrain.origin_x = 0;
+	terrain.origin_y = 0;
 	terrain.scale_x = WINDOW_WIDTH / (terrain.width + 50);
 	terrain.scale_y = WINDOW_HEIGHT / (terrain.height + 25);
 	render_terrain(&terrain);
 	mlx_put_image_to_window(terrain.mlx, terrain.mlx_win, terrain.img, 0, 0);
-	mlx_key_hook(terrain.mlx_win, key_hook, &terrain);
+	if (mlx_key_hook(terrain.mlx_win, key_hook, &terrain) == 0)
+		return (0);
 	mlx_loop(terrain.mlx);
 }

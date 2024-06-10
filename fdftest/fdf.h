@@ -76,4 +76,5 @@ int get_color(int z, int high, int low);
 int interpolate_color(int start_color, int end_color, float factor);
 void get_color_steps(int color1, int color2, int length, Line_data *line);
 int create_color(int red, int green, int blue);
+void	end_window(t_terrain *terrain);
 #endif

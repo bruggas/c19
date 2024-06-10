@@ -6,7 +6,7 @@
 /*   By: felix <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 15:31:42 by felix             #+#    #+#             */
-/*   Updated: 2024/05/23 13:32:09 by felix            ###   ########.fr       */
+/*   Updated: 2024/05/27 10:30:38 by felix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
@@ -57,6 +57,7 @@ static void	high_low(char **colmn, t_terrain *terrain)
 static int	fill_result(char ***result, t_terrain *terrain, int fd, char *map)
 {
 	char	*new_line;
+	char	*trnl;
 	char	**colmn;
 	int		i;
 
@@ -71,9 +72,10 @@ static int	fill_result(char ***result, t_terrain *terrain, int fd, char *map)
 	new_line = get_next_line(fd);
 	while (new_line)
 	{
-		new_line = ft_strtrim(new_line, "\n");
-		colmn = ft_split(new_line, ' ');
+		trnl = ft_strtrim(new_line, "\n");
 		free(new_line);
+		colmn = ft_split(trnl, ' ');
+		free(trnl);
 		high_low(colmn, terrain);
 		result[i] = colmn;
 		i++;
